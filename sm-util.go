@@ -27,10 +27,6 @@ func main() {
 	flag.StringVar(&jsonUri, "uri", "{uri}", "json uri or path to file")
 	flag.Parse()
 
-	fmt.Println(command)
-	fmt.Println(mustacheData)
-	fmt.Println(templateFile)
-
 	if command == "mustache" {
 		fmt.Println(templateFile)
 		if templateFile == "{file}" {
