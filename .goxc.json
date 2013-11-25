@@ -1,6 +1,17 @@
 {
-	"ArtifactsDest": "./binaries",
-	"PackageVersion": "0.1.0",
-	"ConfigVersion": "0.9",
-	"BuildSettings": {}
+  "ArtifactsDest": "./binaries",
+  "PackageVersion": "0.1.0",
+  "ConfigVersion": "0.9",
+  "TaskSettings": {
+    "archive-tar-gz": {
+      "platforms": {
+        "linux": "TarGz",
+        "darwin": "TarGz",
+        "netbsd": "TarGz",
+        "freebsd": "TarGz",
+        "openbsd": "TarGz",
+        "plan9": "TarGz"
+      }
+    }
+  }
 }
