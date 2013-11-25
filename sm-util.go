@@ -16,6 +16,7 @@ var (
 	jsonPath     string
 	templateFile string
 	jsonUri      string
+	jsonString   string
 )
 
 func main() {
@@ -25,6 +26,7 @@ func main() {
 	flag.StringVar(&jsonPath, "path", "{path}", "path of variable")
 	flag.StringVar(&templateFile, "template", "{file}", "path to template file")
 	flag.StringVar(&jsonUri, "uri", "{uri}", "json uri or path to file")
+	flag.StringVar(&jsonString, "json", "{}", "json string")
 	flag.Parse()
 
 	if command == "mustache" {
