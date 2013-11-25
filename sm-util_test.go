@@ -43,7 +43,7 @@ func TestJSON(t *testing.T) {
 			ioutil.WriteFile(jsonFileName, []byte(jsonData), 0644)
 			defer os.Remove(jsonFileName)
 			jsonPath := "a/b"
-			value := json.Run(&jsonFileName, &jsonPath)
+			value := json.Run(jsonFileName, jsonPath)
 			So(value, ShouldEqual, "2")
 		})
 
@@ -53,7 +53,7 @@ func TestJSON(t *testing.T) {
 			ioutil.WriteFile(jsonFileName, []byte(jsonData), 0644)
 			defer os.Remove(jsonFileName)
 			jsonPath := "a/c"
-			value := json.Run(&jsonFileName, &jsonPath)
+			value := json.Run(jsonFileName, jsonPath)
 			So(value, ShouldEqual, "d")
 		})
 

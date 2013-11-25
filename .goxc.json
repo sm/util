@@ -1,0 +1,6 @@
+{
+	"ArtifactsDest": "./binaries",
+	"PackageVersion": "0.1.0",
+	"ConfigVersion": "0.9",
+	"BuildSettings": {}
+}

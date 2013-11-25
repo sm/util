@@ -38,29 +38,29 @@ func findMapValue(data map[string]interface{}) string {
 	return value
 }
 
-func Run(uri *string, path *string) string {
-	if *uri == "{uri}" {
+func Run(uri string, path string) string {
+	if uri == "{uri}" {
 		log.Fatal("ERROR: A json file location must be specified for reading using --uri={{uri}}")
 	} else {
-		file, err := os.Open(*uri)
+		file, err := os.Open(uri)
 		if err != nil {
-			log.Fatalf("ERROR: The json file at '%s' cannot be opened", *uri)
+			log.Fatalf("ERROR: The json file at '%s' cannot be opened", uri)
 		}
 
 		bfile := bufio.NewReader(file)
 		buf, err := ioutil.ReadAll(bfile)
 		if file == nil && err != nil {
-			log.Fatalf("ERROR: A json does not exist at '%s'", *uri)
+			log.Fatalf("ERROR: A json does not exist at '%s'", uri)
 		}
 
 		jsonError := json.Unmarshal(buf, &f)
 
 		if jsonError != nil {
-			log.Fatalf("ERROR: Unable to parse json file located at '%s'", *uri)
+			log.Fatalf("ERROR: Unable to parse json file located at '%s'", uri)
 		}
 
 		// Parse path
-		pathArray := strings.Split(*path, "/")
+		pathArray := strings.Split(path, "/")
 		for i := range pathArray {
 			switch v := f[pathArray[i]].(type) {
 			case string:
