@@ -30,7 +30,6 @@ func main() {
 	flag.Parse()
 
 	if command == "mustache" {
-		fmt.Println(templateFile)
 		if templateFile == "{file}" {
 			log.Fatal("ERROR: A template file location must be specified with -template {{path to template file}}")
 		}
