@@ -6,9 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"reflect"
 	"strconv"
-
 	"strings"
 )
 
@@ -27,7 +25,7 @@ func findValue(key []string, data map[string]interface{}, index int) string {
 	case map[string]interface{}:
 		return findValue(key, v, index+1)
 	default:
-		log.Fatal("ERROR: Error with value %s, %s", v, reflect.TypeOf(v))
+		log.Fatal("ERROR: Error with value", v)
 	}
 	return ""
 }
