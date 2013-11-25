@@ -2,3 +2,4 @@ sm-util
 util.test
 compile
 binaries/
+test*

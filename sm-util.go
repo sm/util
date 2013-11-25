@@ -6,46 +6,47 @@ import (
 	"github.com/sm/util/json"
 	"github.com/sm/util/mustache"
 	"log"
-	"os"
+	//"os"
 )
 
 var (
-	data     string
-	output   string
-	path     string
-	template string
-	uri      string
+	command      string
+	mustacheData string
+	outputFile   string
+	jsonPath     string
+	templateFile string
+	jsonUri      string
 )
 
-func Init() {
-	//data = flag.String("data", "key1=value1:~key2=value2", "key=value data pair, overrides json file data")
-	flag.StringVar(&data, "data", "key1=value1:~key2=value2", "key=value data pair, overrides json file data")
-
-	//output = flag.String("output", "{file}", "path to output file")
-	flag.StringVar(&output, "output", "{file}", "path to output file")
-	//path = flag.String("path", "{path}", "path of variable")
-	flag.StringVar(&path, "path", "{path}", "path of variable")
-	//template = flag.String("template", "{file}", "path to template file")
-	flag.StringVar(&template, "template", "{file}", "path to template file")
-	//uri = flag.String("uri", "{uri}", "json uri or path to file")
-	flag.StringVar(&uri, "uri", "{uri}", "json uri or path to file")
-
-	flag.Parse()
-}
-
 func main() {
-	command := os.Args[1]
+	flag.StringVar(&command, "c", "help", "Command to run, one of {mustache,json}")
+	flag.StringVar(&mustacheData, "data", "{data}", "string of key=value pairs separated by a :~")
+	flag.StringVar(&outputFile, "output", "{file}", "path to output file")
+	flag.StringVar(&jsonPath, "path", "{path}", "path of variable")
+	flag.StringVar(&templateFile, "template", "{file}", "path to template file")
+	flag.StringVar(&jsonUri, "uri", "{uri}", "json uri or path to file")
+	flag.Parse()
+
+	fmt.Println(command)
+	fmt.Println(mustacheData)
+	fmt.Println(templateFile)
 
 	if command == "mustache" {
-		fmt.Println(template)
-		if template == "{file}" {
+		fmt.Println(templateFile)
+		if templateFile == "{file}" {
 			log.Fatal("ERROR: A template file location must be specified with -template {{path to template file}}")
 		}
-		mustache.Run(template, data, output)
+		if mustacheData == "{data}" {
+			log.Fatal("ERROR: -data must be given as a string of key=value pairs separated by a :~")
+		}
+		if outputFile == "{file}" {
+			log.Fatal("ERROR: -output filename with path must be given.")
+		}
+		mustache.Run(templateFile, mustacheData, outputFile)
 	} else if command == "json" {
-		value := json.Run(uri, path)
+		value := json.Run(jsonUri, jsonPath)
 		fmt.Println(value)
 	} else {
-		log.Fatal("ERROR: Unknown Command as first argument, expected {mustache|json}")
+		log.Fatal("ERROR: Unknown Command or not specified: -c {mustache|json}")
 	}
 }
