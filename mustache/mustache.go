@@ -1,7 +1,7 @@
 package mustache
 
 import (
-	"github.com/hoisie/mustache"
+	"github.com/sm/go-mustache"
 	"log"
 	"os"
 	"strings"
