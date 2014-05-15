@@ -29,63 +29,69 @@ then
 	exit 1
 fi
 
-platforms=(
-	"darwin 386"
-	"darwin amd64"
-	"freebsd 386"
-	"freebsd amd64"
-	"linux 386"
-	"linux amd64"
-	"linux arm"
-	"windows 386"
-	"windows amd64"
-)
-
 # Make sure releases_path is set or set to the CWD
 true ${releases_path:=$PWD} ${repo_path:=$PWD}
-mkdir -p ${releases_path}/releases/ ${releases_path}/releases/archives/
+mkdir -p ${releases_path}/releases/
 
 cd ${repo_path}
+
 git tag -a "${tag}" -m "${tag_desc}"
 
-for platform in ${platforms[@]}
-do
-	rm -f util util.exe
-	export GOARM=7 GOARCH=${platform//* } GOOS=${platform// *}
+sed -i -e "s/^.*\"PackageVersion\": \".*\",.*$/  \"PackageVersion\": \"${tag}\",/" .goxc.json
 
-	cd ${repo_path}
-	echo -e "\n=> Building sm-util ${tag} release for os: ${GOOS}, arch: ${GOARCH}"
-	if go build
-	then
-		mkdir -p ${releases_path}/releases/${GOOS}/${GOARCH}/${tag}
-		case $GOOS in
-			(windows) name="util.exe" ;;
-			(*) name="util" ;;
-		esac
+goxc
 
-		mv ${name} ${releases_path}/releases/${GOOS}/${GOARCH}/${tag}/sm-${name}
-		(
-		cd ${releases_path}/releases/${GOOS}/${GOARCH}/${tag}
-		echo "=> Prepairing archives for sm-util ${tag} on ${GOOS} ${GOARCH}"
-		echo "=> xz..."
-		cat sm-${name} | xz -9 -e - > sm-util.xz
-		echo "=> gz..."
-		cat sm-${name} | gzip -9 - > sm-util.gz
-		echo "=> bz2..."
-		cat sm-${name} | bzip2 -9 - > sm-util.bz2
-		echo "=> zip..."
-		cat sm-${name} | zip -9 sm-util -
-
-		echo "=> Copying into ${releases_path}/archives/"
-		for ext in xz gz bz2 zip
-		do 
-			cp ${releases_path}/releases/${GOOS}/${GOARCH}/${tag}/sm-util.${ext} \
-				"${releases_path}/releases/archives/sm-util-${tag}-${GOOS}-${GOARCH}.${ext}"
-		done
-		)
-	else
-		echo "!> Error building sm-util ${tag} release for os: ${GOOS}, arch: ${GOARCH}"\
-			"Did you run bin/prepare first?"
-	fi
-done
-unset GOARCH GOOS
+#platforms=(
+#	"darwin 386"
+#	"darwin amd64"
+#	"freebsd 386"
+#	"freebsd amd64"
+#	"linux 386"
+#	"linux amd64"
+#	"linux arm"
+#	"windows 386"
+#	"windows amd64"
+#)
+#
+#mkdir -p ${releases_path}/releases/archives/
+#for platform in ${platforms[@]}
+#do
+#	rm -f util util.exe
+#	export GOARM=7 GOARCH=${platform//* } GOOS=${platform// *}
+#
+#	cd ${repo_path}
+#	echo -e "\n=> Building sm-util ${tag} release for os: ${GOOS}, arch: ${GOARCH}"
+#	if go build
+#	then
+#		mkdir -p ${releases_path}/releases/${GOOS}/${GOARCH}/${tag}
+#		case $GOOS in
+#			(windows) name="util.exe" ;;
+#			(*) name="util" ;;
+#		esac
+#
+#		mv ${name} ${releases_path}/releases/${GOOS}/${GOARCH}/${tag}/sm-${name}
+#		(
+#		cd ${releases_path}/releases/${GOOS}/${GOARCH}/${tag}
+#		echo "=> Prepairing archives for sm-util ${tag} on ${GOOS} ${GOARCH}"
+#		echo "=> xz..."
+#		cat sm-${name} | xz -9 -e - > sm-util.xz
+#		echo "=> gz..."
+#		cat sm-${name} | gzip -9 - > sm-util.gz
+#		echo "=> bz2..."
+#		cat sm-${name} | bzip2 -9 - > sm-util.bz2
+#		echo "=> zip..."
+#		cat sm-${name} | zip -9 sm-util -
+#
+#		echo "=> Copying into ${releases_path}/archives/"
+#		for ext in xz gz bz2 zip
+#		do 
+#			cp ${releases_path}/releases/${GOOS}/${GOARCH}/${tag}/sm-util.${ext} \
+#				"${releases_path}/releases/archives/sm-util-${tag}-${GOOS}-${GOARCH}.${ext}"
+#		done
+#		)
+#	else
+#		echo "!> Error building sm-util ${tag} release for os: ${GOOS}, arch: ${GOARCH}"\
+#			"Did you run bin/prepare first?"
+#	fi
+#done
+#unset GOARCH GOOS

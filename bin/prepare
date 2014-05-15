@@ -1,17 +1,5 @@
 #!/usr/bin/env zsh
 
-platforms=(
-	"darwin 386"
-	"darwin amd64"
-	"freebsd 386"
-	"freebsd amd64"
-	"linux 386"
-	"linux amd64"
-	"linux arm"
-	"windows 386"
-	"windows amd64"
-)
-
 if ! command -v go
 then
 	echo "The go command was not found in your path.  "\
@@ -28,18 +16,31 @@ then
 	exit 1
 fi
 
-cd ${gosrc}
+go get github.com/laher/goxc
+goxc -t
 
-for platform in ${platforms[@]}
-do
-	export GOARM=7 GOARCH=${platform//* } GOOS=${platform// *}
-
-	echo "=> Building go for os: ${GOOS}, arch: ${GOARCH}"
-	if ./make.bash > /dev/null
-	then
-		echo -e "=> built go for os: ${GOOS}, arch: ${GOARCH}\n"
-	else
-		echo "!> Error building for os: ${GOOS}, arch: ${GOARCH}"
-	fi
-done
-unset GOARCH GOOS
+#platforms=(
+#	"darwin 386"
+#	"darwin amd64"
+#	"freebsd 386"
+#	"freebsd amd64"
+#	"linux 386"
+#	"linux amd64"
+#	"linux arm"
+#	"windows 386"
+#	"windows amd64"
+#)
+#
+#cd ${gosrc}
+#
+#for platform in ${platforms[@]}
+#do
+#	export GOARM=7 GOARCH=${platform//* } GOOS=${platform// *}
+#
+#	echo "=> Building go for os: ${GOOS}, arch: ${GOARCH}"
+#	if ./make.bash --no-clean > 2>&1 /dev/null
+#	then echo -e "=> built go for os: ${GOOS}, arch: ${GOARCH}\n"
+#	else echo "!> Error building for os: ${GOOS}, arch: ${GOARCH}"
+#	fi
+#done
+#unset GOARCH GOOS
