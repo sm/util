@@ -6,3 +6,4 @@ test*
 *.test
 release/
 releases
+.goxc.json-e
