@@ -4,3 +4,5 @@ compile
 binaries/
 test*
 *.test
+release/
+releases

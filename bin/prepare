@@ -1,0 +1,45 @@
+#!/usr/bin/env zsh
+
+platforms=(
+	"darwin 386"
+	"darwin amd64"
+	"freebsd 386"
+	"freebsd amd64"
+	"linux 386"
+	"linux amd64"
+	"linux arm"
+	"windows 386"
+	"windows amd64"
+)
+
+if ! command -v go
+then
+	echo "The go command was not found in your path.  "\
+		"Install go from source, add it to your path and try again."
+	exit 1
+fi
+
+gosrc=$(go env GOROOT)/src
+
+if [[ ! -x ${gosrc}/make.bash ]]
+then 
+	echo "You must install go from source for this to work.  "\
+		"The ${gosrc}/make.bash script was not found"
+	exit 1
+fi
+
+cd ${gosrc}
+
+for platform in ${platforms[@]}
+do
+	export GOARM=7 GOARCH=${platform//* } GOOS=${platform// *}
+
+	echo "=> Building go for os: ${GOOS}, arch: ${GOARCH}"
+	if ./make.bash > /dev/null
+	then
+		echo -e "=> built go for os: ${GOOS}, arch: ${GOARCH}\n"
+	else
+		echo "!> Error building for os: ${GOOS}, arch: ${GOARCH}"
+	fi
+done
+unset GOARCH GOOS
