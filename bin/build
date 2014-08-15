@@ -1,0 +1,24 @@
+#!/usr/bin/env zsh
+
+if ! command -v go > /dev/null 2>&1
+then 
+	echo "Be sure to run bin/prepare first after installing go from source and "\
+		"adding to your path."
+	exit 1
+fi
+
+if ! command -v git > /dev/null 2>&1
+then
+	echo "Please install git (http://git-scm.com) and add it to your path first."
+	exit 1
+fi
+
+git tag | grep '^\d' | sort -r | head -1
+
+goxc
+
+cd releases/0.5.1/
+for file in *0.5.1*
+do mv ${file} sm-${file}
+done
+
