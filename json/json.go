@@ -94,7 +94,6 @@ func dict(data map[string]interface{}, path []string, segment int) (value string
 	default:
 		err = errors.New(fmt.Sprintf("ERROR: dict(): Unknown '%v' of type '%v'\n", v,reflect.TypeOf(v)))
 	}
-	//}
 	return
 }
 
