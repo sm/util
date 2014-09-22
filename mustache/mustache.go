@@ -9,8 +9,7 @@ import (
 
 var mapData map[string]string
 
-func Run(template string, data string, output string) {
-
+func Run(template string, data string, output string) (value string, err error){
 	mapData = make(map[string]string)
 
 	//Error checking on arguements passed in
@@ -29,13 +28,14 @@ func Run(template string, data string, output string) {
 		}
 	}
 
-	fileData := mustache.RenderFile(template, mapData)
+	value = mustache.RenderFile(template, mapData)
 
 	if output != "{file}" {
 		outputFile, err := os.Create(output)
 		if err != nil {
 			log.Fatalf("ERROR: Unable to create output file %s", output)
 		}
-		outputFile.WriteString(fileData)
+		outputFile.WriteString(value)
 	}
+	return
 }
