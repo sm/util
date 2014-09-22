@@ -2,7 +2,9 @@ package json
 
 import (
 	"bufio"
+	"fmt"
 	"encoding/json"
+	"reflect"
 	"io/ioutil"
 	"log"
 	"os"
@@ -69,6 +71,18 @@ func Run(uri string, path string) string {
 				} else {
 					log.Fatalf("ERROR: Unable to traverse the full path before encoutering a value at '%s'.", v)
 				}
+			case int:
+				if len(pathArray) == i+1 {
+					value = strconv.Itoa(int(v))
+				} else {
+					log.Fatalf("ERROR: Unable to traverse the full path before encoutering a value at '%s'.", v)
+				}
+			case float64:
+				if len(pathArray) == i+1 {
+					value = strconv.FormatFloat(v,'f',-1,64)
+				} else {
+					log.Fatalf("ERROR: Unable to traverse the full path before encoutering a value at '%s'.", v)
+				}
 			case map[string]interface{}:
 				if len(pathArray) == i+1 {
 					value = findMapValue(v)
@@ -88,6 +102,7 @@ func Run(uri string, path string) string {
 					}
 				}
 			default:
+				fmt.Printf("Unknown value type: %v :: ",v,reflect.TypeOf(v))
 			}
 			if len(value) > 0 {
 				break
